@@ -38,8 +38,31 @@ const app = express();
 // Security & Middleware
 // ===========================
 app.use(helmet());
-app.use(cors({ origin: process.env.CORS_ORIGIN || "*" }));
-app.use(express.json({ limit: "50mb" })); // Kept high limit per requirement
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = (process.env.CORS_ORIGIN || "*")
+      .split(",")
+      .map((o) => o.trim());
+
+    // Allow requests with no origin (e.g., mobile apps, curl requests)
+    if (!origin || allowedOrigins.includes("*")) {
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // Rate Limiting
@@ -197,7 +220,6 @@ app.post("/api/verify-lender", async (req, res) => {
         .json({ error: "Lender name is required (string)" });
     }
 
-    // Normalize search term
     const normalizedSearch = lenderName
       .toLowerCase()
       .trim()
@@ -270,7 +292,6 @@ app.post("/api/verify-lender", async (req, res) => {
   }
 });
 
-// OJK Proxy Routes (Refactored)
 app.get("/api/ojk/apps", (req, res) => proxyOjkRequest(req, res, "apps"));
 app.get("/api/ojk/illegals", (req, res) =>
   proxyOjkRequest(req, res, "illegals"),

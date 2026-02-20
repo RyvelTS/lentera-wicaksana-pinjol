@@ -35,7 +35,6 @@ export class LoanCalculator {
    * @returns Complete loan metrics including risk assessment
    */
   calculateMetrics(input: LoanInput, isOjkRegistered: boolean): LoanMetrics {
-    // Input validation
     this.validateInput(input);
 
     let totalInterest = 0;

@@ -1,9 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 import { LoanMetrics, LoanInput } from './loan-calculator';
+// Import the environment file
+import { environment } from '../../environments/environment';
 
 interface ChatRequest {
   messages: Array<{ role: string; content: string }>;
@@ -21,9 +22,7 @@ interface ChatResponse {
 @Injectable({ providedIn: 'root' })
 export class AiClient {
   private http = inject(HttpClient);
-
-  // API endpoint
-  private readonly endpoint = '/api/chat';
+  private readonly baseUrl = environment.apiUrl;
 
   /**
    * Request AI-generated financial explanation for loan analysis
@@ -37,10 +36,7 @@ export class AiClient {
     metrics: LoanMetrics,
     ojkStatus: boolean,
   ): Observable<string> {
-    // Build detailed prompt for AI analysis
     const userPrompt = this.buildPrompt(input, metrics, ojkStatus);
-
-    // Construct request
     const request: ChatRequest = {
       messages: [
         {
@@ -48,11 +44,11 @@ export class AiClient {
           content: userPrompt,
         },
       ],
-      temperature: 0.3, // Low temperature for consistent, focused responses
+      temperature: 0.3,
     };
 
     // Send request and handle response
-    return this.http.post<ChatResponse>(this.endpoint, request).pipe(
+    return this.http.post<ChatResponse>(`${this.baseUrl}/chat`, request).pipe(
       map((res) => res.result || 'Gagal menghasilkan penjelasan'),
       catchError((error) => {
         console.error('AI request failed:', error);
@@ -89,7 +85,7 @@ export class AiClient {
       .post<{
         result: string;
         conversationHistory: Array<{ role: string; content: string }>;
-      }>('/api/chat-multimodal', formData)
+      }>(`${this.baseUrl}/chat-multimodal`, formData)
       .pipe(
         catchError((error) => {
           console.error('Multimodal chat failed:', error);

@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 interface VerifyLenderResponse {
   isRegistered: boolean;
@@ -21,7 +22,7 @@ interface VerifyLenderResponse {
 @Injectable({ providedIn: 'root' })
 export class OjkValidator {
   private http = inject(HttpClient);
-  private readonly backendUrl = '/api';
+  private readonly baseUrl = environment.apiUrl;
 
   /**
    * Verify if a lender name is officially registered with OJK
@@ -31,7 +32,7 @@ export class OjkValidator {
    */
   verify(lenderName: string): Observable<boolean> {
     return this.http
-      .post<VerifyLenderResponse>(`${this.backendUrl}/verify-lender`, {
+      .post<VerifyLenderResponse>(`${this.baseUrl}/verify-lender`, {
         lenderName,
       })
       .pipe(
@@ -51,7 +52,7 @@ export class OjkValidator {
    */
   verifyDetailed(lenderName: string): Observable<VerifyLenderResponse> {
     return this.http
-      .post<VerifyLenderResponse>(`${this.backendUrl}/verify-lender`, {
+      .post<VerifyLenderResponse>(`${this.baseUrl}/verify-lender`, {
         lenderName,
       })
       .pipe(
@@ -72,7 +73,7 @@ export class OjkValidator {
    * @returns Observable with list of registered apps
    */
   getRegisteredApps(): Observable<any> {
-    return this.http.get(`${this.backendUrl}/ojk/apps`).pipe(
+    return this.http.get(`${this.baseUrl}/ojk/apps`).pipe(
       catchError((error) => {
         console.error('Failed to fetch OJK apps:', error);
         return of({ data: { apps: [], version: '' } });
@@ -85,7 +86,7 @@ export class OjkValidator {
    * @returns Observable with list of illegal products
    */
   getIllegalProducts(): Observable<any> {
-    return this.http.get(`${this.backendUrl}/ojk/illegals`).pipe(
+    return this.http.get(`${this.baseUrl}/ojk/illegals`).pipe(
       catchError((error) => {
         console.error('Failed to fetch OJK illegals:', error);
         return of({ data: { illegals: [], version: '' } });
@@ -98,7 +99,7 @@ export class OjkValidator {
    * @returns Observable with API status
    */
   getApiStatus(): Observable<any> {
-    return this.http.get(`${this.backendUrl}/ojk/status`).pipe(
+    return this.http.get(`${this.baseUrl}/ojk/status`).pipe(
       catchError((error) => {
         console.error('Failed to fetch OJK status:', error);
         return of({ error: error.message });
