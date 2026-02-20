@@ -208,10 +208,15 @@
   <!-- Submit Button -->
   <button
     type="submit"
-    [disabled]="form.invalid"
-    class="w-full bg-blue-700 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-700 mt-6 transition-colors"
+    [disabled]="form.invalid || isLoading()"
+    class="w-full bg-blue-700 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-800 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:opacity-60 disabled:cursor-not-allowed transition-all mt-6 flex items-center justify-center gap-2"
   >
-    Analisis Risiko Pinjaman
+    @if (isLoading()) {
+      <span class="inline-block animate-spin">⏳</span>
+      Menganalisis...
+    } @else {
+      Analisis Risiko Pinjaman
+    }
   </button>
 
   <p class="text-xs text-gray-500 text-center">* Wajib diisi</p>

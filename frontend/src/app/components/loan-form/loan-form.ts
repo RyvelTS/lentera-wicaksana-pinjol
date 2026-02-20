@@ -37,6 +37,7 @@ export class LoanForm {
 
   verificationStatus = signal<'none' | 'registered' | 'illegal' | 'unregistered'>('none');
   isVerifying = signal<boolean>(false);
+  isLoading = signal<boolean>(false);
   showSuggestions = signal<boolean>(false);
   suggestions = signal<string[]>([]);
 
@@ -172,6 +173,7 @@ export class LoanForm {
    */
   processForm(): void {
     if (this.form.valid) {
+      this.isLoading.set(true);
       const formValue = this.form.value as unknown as LoanInput;
       formValue.amount = Number(formValue.amount);
       formValue.interestRate = Number(formValue.interestRate);
@@ -180,6 +182,8 @@ export class LoanForm {
       formValue.monthlyIncome = Number(formValue.monthlyIncome);
 
       this.calculate.emit(formValue);
+      // Reset loading state after a short delay to allow parent to process
+      setTimeout(() => this.isLoading.set(false), 500);
     } else {
       this.form.markAllAsTouched();
     }

@@ -126,12 +126,13 @@
       <button
         (click)="sendMessage()"
         [disabled]="(!messageInput().trim() && !selectedFile()) || isLoading()"
-        class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed font-bold flex items-center gap-2"
+        class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-60 font-bold flex items-center gap-2 transition-all"
       >
         @if (isLoading()) {
-          ⏳
+          <span class="inline-block animate-spin">⏳</span>
+          Mengirim...
         } @else {
-          ➤
+          ➤ Kirim
         }
       </button>
     </div>
