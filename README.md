@@ -2,12 +2,14 @@
 
 A modern, production-ready web application for analyzing online loan risks, built with **Angular 21**, **Node.js 24 LTS**, **Express**, and **Google Gemini 2.5 Flash**. Designed for transparency, security, and extensibility.
 
+> 🎓 **Program**: Capstone project for [Hacktiv8 — Maju Bareng AI Bersama Hacktiv8](https://www.hacktiv8.com/projects/avpn-asia) — Full-Stack JavaScript Development Program
+
 ---
 
 ## 🚀 Features
 
 - **Loan Risk Analysis**: Calculates APR, DTI, monthly payments, and risk scores
-- **OJK Compliance**: Real-time verification of lender legality via OJK API
+- **OJK Data Integration**: Real-time verification of lender legality via [community OJK API](https://github.com/Namchee/ojk-invest-api) (⚠️ not official; see [official OJK](https://www.ojk.go.id/) for verified data)
 - **AI-Powered Explanations**: Google Gemini 2.5 Flash generates financial advice in Bahasa Indonesia
 - **Multimodal Chat**: Upload images, PDFs, or audio for AI analysis
 - **Zero Data Persistence**: No user data is stored; all operations are in-memory
@@ -106,10 +108,10 @@ docker compose up --build
 - `POST /api/chat` — AI chat/explanation
 - `POST /api/chat-multimodal` — AI chat with file upload (image, PDF, audio)
 - `POST /api/verify-lender` — OJK lender verification
-- `GET /api/ojk/apps` — List of legal lenders
-- `GET /api/ojk/illegals` — List of illegal lenders
-- `GET /api/ojk/products` — List of legal products
-- `GET /api/ojk/status` — OJK API health
+- `GET /api/ojk/apps` — List of legal lenders (via [community API](https://github.com/Namchee/ojk-invest-api))
+- `GET /api/ojk/illegals` — List of illegal lenders (via [community API](https://github.com/Namchee/ojk-invest-api))
+- `GET /api/ojk/products` — List of legal products (via [community API](https://github.com/Namchee/ojk-invest-api))
+- `GET /api/ojk/status` — Community OJK API health check
 
 See [backend/index.js](backend/index.js) for full details and request/response formats.
 
@@ -168,7 +170,7 @@ CORS_ORIGIN=http://localhost,https://yourdomain.com
 
 - **Backend not starting**: Check `.env` and Gemini API key, run `docker logs lentera-pinjol-backend`
 - **Frontend can't reach backend**: Check proxy config, CORS, and nginx logs
-- **OJK API errors**: Check `/api/ojk/status` and backend logs
+- **OJK data issues**: Check `/api/ojk/status` and backend logs. Note: Uses [community OJK API](https://github.com/Namchee/ojk-invest-api); for official OJK data, visit [ojk.go.id](https://www.ojk.go.id/)
 - **AI not responding**: Check Gemini API key and backend logs
 
 ---
@@ -200,6 +202,14 @@ MIT License — see LICENSE
 
 - Open an issue or discussion on GitHub
 - PRs and suggestions welcome!
+
+---
+
+## ⚠️ Important Notes
+
+- **OJK API Status (as of Feb 20, 2026)**: There is no official public API from OJK. This application uses a community-maintained API from [Namchee/ojk-invest-api](https://github.com/Namchee/ojk-invest-api) for demonstration purposes.
+- **Official OJK Resources**: Visit [www.ojk.go.id](https://www.ojk.go.id/) for official, verified lender information and compliance details.
+- **Educational Use**: This application is designed as a financial education tool. Always verify lender legitimacy through official OJK channels before taking any loan.
 
 ---
 
