@@ -1,0 +1,83 @@
+/* Tailwind CSS v4 - CSS-native imports */
+@import 'tailwindcss';
+
+@theme {
+  /* Custom theme variables if needed */
+}
+
+/* Global Styles */
+* {
+  @apply transition-colors duration-200;
+}
+
+/* Accessibility - Focus visible */
+:focus-visible {
+  outline: 2px solid rgb(37, 99, 235);
+  outline-offset: 2px;
+}
+
+button:focus-visible {
+  @apply ring-2 ring-blue-400 ring-offset-2;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  @apply ring-2 ring-blue-400 ring-offset-1;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Base form styling */
+input,
+select,
+textarea {
+  @apply disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Utility for responsive containers */
+.container {
+  @apply px-4 mx-auto;
+}
+
+/* Print styles */
+@media print {
+  header,
+  footer {
+    @apply hidden;
+  }
+}

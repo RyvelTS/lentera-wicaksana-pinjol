@@ -1,0 +1,28 @@
+{
+  "name": "lentera-pinjol-api",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Production-ready REST API for Lentera Wicaksana Pinjol with Google Gemini 2.5 Flash integration",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": [
+    "loan",
+    "calculator",
+    "gemini",
+    "ai",
+    "express"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@google/generative-ai": "^0.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.3.1",
+    "helmet": "^7.1.0",
+    "multer": "^1.4.5-lts.1"
+  }
+}
