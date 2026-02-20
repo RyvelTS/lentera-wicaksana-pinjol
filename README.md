@@ -1,6 +1,6 @@
 # Lentera Wicaksana Pinjol
 
-A modern, production-ready web application for analyzing online loan risks, built with **Angular 21**, **Node.js 24 LTS**, **Express**, and **Google Gemini 2.5 Flash**. Designed for transparency, security, and extensibility.
+A modern, production-ready web application for analyzing online loan risks, built with **Angular 21**, **Node.js 22 LTS**, **Express**, and **Google Gemini 2.5 Flash**. Designed for transparency, security, and extensibility.
 
 > 🎓 **Program**: Capstone project for [Hacktiv8 — Maju Bareng AI Bersama Hacktiv8](https://www.hacktiv8.com/projects/avpn-asia) — Full-Stack JavaScript Development Program
 
@@ -37,7 +37,7 @@ project-root/
 │   ├── nginx.conf
 │   ├── Dockerfile
 │   └── ...
-├── backend/          # Node.js 24 Express API
+├── backend/          # Node.js 22 Express API
 │   ├── index.js      # Main server
 │   ├── package.json
 │   ├── .env          # API keys (not in git)
@@ -53,7 +53,7 @@ project-root/
 
 ### Prerequisites
 
-- Node.js 24 LTS & npm 11+
+- Node.js 22 LTS & npm 10+
 - Angular CLI 21
 - Docker & Docker Compose (for containerized workflow)
 - Google Gemini API key ([get one](https://aistudio.google.com/apikey))
@@ -120,7 +120,7 @@ See [backend/index.js](backend/index.js) for full details and request/response f
 ## 🧑‍💻 Developer Workflow
 
 - **Frontend**: Angular 21, standalone components, Signals, OnPush, Tailwind v4
-- **Backend**: Node.js 24, Express, Google Gemini SDK, OJK API proxy
+- **Backend**: Node.js 22, Express, Google Gemini SDK, OJK API proxy
 - **Multimodal**: File uploads (image, PDF, audio) via memory storage (Multer)
 - **Security**: Helmet, CORS, rate limiting, HTTPS (self-signed in dev)
 - **Testing**: Deterministic calculations, API health checks, Docker healthchecks
@@ -179,7 +179,7 @@ CORS_ORIGIN=http://localhost,https://yourdomain.com
 
 | Component   | Technology         | Version   |
 | ----------- | ------------------ | --------- |
-| Runtime     | Node.js            | 24 LTS    |
+| Runtime     | Node.js            | 22 LTS    |
 | Framework   | Express            | 4.19+     |
 | Frontend    | Angular            | 21        |
 | AI Engine   | Google Gemini      | 2.5 Flash |

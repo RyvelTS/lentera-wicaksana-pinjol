@@ -1,5 +1,4 @@
 <div class="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 font-sans">
-  <!-- Header -->
   <header class="bg-linear-to-r from-blue-800 to-blue-600 text-white shadow-lg py-6 mb-8">
     <div class="container mx-auto px-4 max-w-4xl">
       <div class="flex items-center justify-between">
@@ -21,12 +20,9 @@
     </div>
   </header>
 
-  <!-- Main Content -->
   <main class="container mx-auto px-4 flex flex-col space-y-8 pb-12">
-    <!-- Loan Form -->
     <app-loan-form (calculate)="analyzeLoan($event)"></app-loan-form>
 
-    <!-- Results Section -->
     @if (hasResult()) {
       <div class="animate-fade-in">
         <app-loan-results
@@ -48,13 +44,11 @@
       </div>
     }
 
-    <!-- Multimodal Chat Feature -->
     <div class="mt-12">
       <app-multimodal-chat></app-multimodal-chat>
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="bg-gray-800 text-gray-300 py-6 mt-12">
     <div class="container mx-auto px-4 max-w-4xl text-center text-sm">
       <p>&copy; 2026 Lentera Wicaksana. Alat edukasi finansial gratis untuk Indonesia.</p>

@@ -1,0 +1,156 @@
+<div class="bg-white rounded-xl shadow-lg p-6 max-w-4xl mx-auto">
+  <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+    <span>💬</span>
+    Obrolan Multimodal dengan AI Keuangan
+  </h2>
+
+  <!-- Chat History -->
+  <div
+    class="bg-gray-50 rounded-lg p-4 mb-6 min-h-200 max-h-screen overflow-y-auto border border-gray-200 space-y-4"
+  >
+    @if (conversationHistory().length === 0) {
+      <div class="flex items-center justify-center h-full text-center text-gray-400">
+        <div>
+          <p class="text-4xl mb-2">💭</p>
+          <p>Mulai percakapan dengan mengirim pesan</p>
+        </div>
+      </div>
+    } @else {
+      @for (msg of conversationHistory(); track $index) {
+        <div [class]="msg.role === 'user' ? 'flex justify-end' : 'flex justify-start'">
+          <div
+            [class]="
+              msg.role === 'user'
+                ? 'bg-blue-500 text-white rounded-lg px-4 py-3 max-w-xs md:max-w-md'
+                : 'bg-gray-200 text-gray-800 rounded-lg px-4 py-3 max-w-xl'
+            "
+          >
+            <!-- Display Image if available -->
+            @if (msg.file && msg.file.type.startsWith('image') && msg.file.url) {
+              <div class="mb-2">
+                <img
+                  [src]="msg.file.url"
+                  alt="Uploaded image"
+                  class="rounded-lg max-h-48 w-auto object-cover border border-white/20"
+                />
+              </div>
+            }
+
+            <!-- Content with Markdown -->
+            <div class="text-sm markdown-content" [innerHTML]="msg.content | markdown"></div>
+
+            <!-- File info footer -->
+            @if (msg.file) {
+              <div class="flex items-center gap-1 mt-2 pt-2 border-t border-white/20 opacity-80">
+                <span class="text-xs">
+                  @if (msg.file.type.startsWith('image')) {
+                    🖼️
+                  } @else if (msg.file.type === 'application/pdf') {
+                    📄
+                  } @else {
+                    📎
+                  }
+                </span>
+                <span class="text-xs">{{ msg.file.name }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+
+    <!-- Loading Indicator -->
+    @if (isLoading()) {
+      <div class="flex justify-start">
+        <div class="bg-gray-200 text-gray-800 rounded-lg px-4 py-3 max-w-xl">
+          <p class="text-sm flex items-center gap-2">
+            <span class="inline-block animate-bounce">●</span>
+            <span class="inline-block animate-bounce" style="animation-delay: 0.1s">●</span>
+            <span class="inline-block animate-bounce" style="animation-delay: 0.2s">●</span>
+          </p>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Message Input Area -->
+  <div class="space-y-4">
+    <!-- File Preview -->
+    @if (selectedFile()) {
+      <div
+        class="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg p-3"
+      >
+        <div class="flex items-center gap-3">
+          @if (selectedFile()!.type.startsWith('image') && selectedFilePreview()) {
+            <img [src]="selectedFilePreview()" class="h-10 w-10 object-cover rounded bg-gray-200" />
+          } @else {
+            <span class="text-xl">
+              @if (selectedFile()!.type === 'application/pdf') {
+                📄
+              } @else if (selectedFile()!.type.startsWith('audio')) {
+                🎵
+              } @else {
+                📎
+              }
+            </span>
+          }
+
+          <div>
+            <p class="text-sm font-medium text-gray-800">{{ selectedFile()!.name }}</p>
+            <p class="text-xs text-gray-500">{{ formatFileSize(selectedFile()!.size) }}</p>
+          </div>
+        </div>
+        <button (click)="clearFile()" class="text-red-500 hover:text-red-700 font-bold px-2 py-1">
+          ✕
+        </button>
+      </div>
+    }
+
+    <!-- Input Controls -->
+    <div class="flex gap-2">
+      <input
+        type="text"
+        [(ngModel)]="messageInput"
+        (keydown.enter)="sendMessage()"
+        placeholder="Ketik pesan..."
+        [disabled]="isLoading()"
+        class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+      />
+      <button
+        (click)="triggerFileInput()"
+        [disabled]="isLoading()"
+        class="px-4 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:bg-gray-100 disabled:cursor-not-allowed font-medium"
+      >
+        📎
+      </button>
+      <button
+        (click)="sendMessage()"
+        [disabled]="(!messageInput().trim() && !selectedFile()) || isLoading()"
+        class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed font-bold flex items-center gap-2"
+      >
+        @if (isLoading()) {
+          ⏳
+        } @else {
+          ➤
+        }
+      </button>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="bg-red-50 border border-red-200 rounded-lg p-3">
+        <p class="text-red-700 text-sm">
+          <span class="font-bold">❌ Error:</span> {{ errorMessage() }}
+        </p>
+      </div>
+    }
+
+    <input
+      type="file"
+      #fileInput
+      (change)="onFileSelected($event)"
+      accept="image/*,.pdf,.txt,audio/*"
+      class="hidden"
+    />
+    <p class="text-xs text-gray-500 text-center">Didukung: Gambar, PDF, Audio • Maks 10MB</p>
+  </div>
+</div>
