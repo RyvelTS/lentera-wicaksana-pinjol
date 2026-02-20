@@ -95,9 +95,28 @@ import { MarkdownPipe } from '../pipes/markdown.pipe';
 
         <!-- Monthly Installment -->
         <div class="bg-gray-50 p-5 rounded-lg border shadow-sm">
-          <p class="text-sm text-gray-600 font-semibold mb-1">Estimasi Cicilan per Bulan</p>
+          <p class="text-sm text-gray-600 font-semibold mb-1">
+            Estimasi Cicilan per
+            @if (
+              metrics()?.tenorUnit === 'days' &&
+              (metrics()?.tenor ?? 0) > 0 &&
+              (metrics()?.tenor ?? 0) < 30
+            ) {
+              <span> Hari</span>
+            } @else {
+              <span> Bulan</span>
+            }
+          </p>
           <p class="text-xl font-bold text-gray-900">
-            Rp {{ metrics()?.monthlyInstallment | number }}
+            @if (
+              metrics()?.tenorUnit === 'days' &&
+              (metrics()?.tenor ?? 0) > 0 &&
+              (metrics()?.tenor ?? 0) < 30
+            ) {
+              Rp {{ metrics()?.dailyInstallment | number }}
+            } @else {
+              Rp {{ metrics()?.monthlyInstallment | number }}
+            }
           </p>
         </div>
 

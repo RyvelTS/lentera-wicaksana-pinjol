@@ -39,6 +39,7 @@ export class App {
   hasResult = signal<boolean>(false);
   showEmptyState = signal<boolean>(true);
   currentMetrics = signal<LoanMetrics | null>(null);
+  currentInput = signal<LoanInput | null>(null);
   isOjkRegistered = signal<boolean>(false);
 
   aiExplanation = signal<string>('');
@@ -52,6 +53,9 @@ export class App {
    */
   analyzeLoan(input: LoanInput): void {
     try {
+      // Store current input for display purposes
+      this.currentInput.set(input);
+
       // Reset AI state for new analysis
       this.isAiLoading.set(true);
       this.hasAiError.set(false);

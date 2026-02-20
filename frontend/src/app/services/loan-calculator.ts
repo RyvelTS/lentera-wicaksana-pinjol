@@ -16,6 +16,9 @@ export interface LoanInput {
 export interface LoanMetrics {
   totalRepayment: number;
   monthlyInstallment: number;
+  dailyInstallment: number;
+  tenor: number;
+  tenorUnit: 'days' | 'months';
   effectiveApr: number;
   dtiRatio: number;
   riskScore: number;
@@ -38,9 +41,11 @@ export class LoanCalculator {
     let totalInterest = 0;
     let effectiveApr = 0;
     let monthlyInstallment = 0;
+    let dailyInstallment = 0;
 
     const principal = input.amount;
     const tenorInMonths = input.tenorUnit === 'months' ? input.tenor : input.tenor / 30;
+    const tenorInDays = input.tenorUnit === 'days' ? input.tenor : input.tenor * 30;
 
     // Calculate based on interest type
     if (input.interestType === 'daily') {
@@ -73,6 +78,11 @@ export class LoanCalculator {
     }
 
     const totalRepayment = principal + totalInterest + input.adminFee;
+
+    // Calculate daily installment
+    dailyInstallment = totalRepayment / tenorInDays;
+
+    // Calculate DTI using appropriate installment (monthly if less than a month in days, monthly otherwise)
     const dtiRatio = (monthlyInstallment / input.monthlyIncome) * 100;
 
     // Calculate risk score
@@ -110,6 +120,9 @@ export class LoanCalculator {
     return {
       totalRepayment: Math.round(totalRepayment * 100) / 100,
       monthlyInstallment: Math.round(monthlyInstallment * 100) / 100,
+      dailyInstallment: Math.round(dailyInstallment * 100) / 100,
+      tenor: input.tenor,
+      tenorUnit: input.tenorUnit,
       effectiveApr: Math.round(effectiveApr * 100) / 100,
       dtiRatio: Math.round(dtiRatio * 100) / 100,
       riskScore,
